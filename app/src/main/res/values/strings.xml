@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">HatenaRss 2019</string>
+    <string name="category_all">すべて</string>
+    <string name="category_economics">経済</string>
+    <string name="category_life">生活</string>
+    <string name="category_social">社会</string>
+    <string name="thumbnail">thumbnail</string>
+    <string name="bookmark">bookmark</string>
+
+    <string name="close">閉じる</string>
+
+    <string name="error_anything">何かがおかしいです</string>
+
+    <string name="network_error_request">リクエストエラー</string>
+    <string name="network_error_internal_error">サーバーエラー</string>
+    <string name="network_error_timeout">タイムアウト</string>
+    <string name="network_error_unknown">予期せぬエラー</string>
+
+    <string name="message_try_again">もう一度お試しください</string>
+</resources>
