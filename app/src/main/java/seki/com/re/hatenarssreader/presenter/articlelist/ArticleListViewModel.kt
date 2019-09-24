@@ -1,6 +1,5 @@
 package seki.com.re.hatenarssreader.presenter.articlelist
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,16 +9,15 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import seki.com.re.hatenarssreader.data.Article
 import seki.com.re.hatenarssreader.data.Error
+import seki.com.re.hatenarssreader.data.Result
 import seki.com.re.hatenarssreader.infra.Category
 import seki.com.re.hatenarssreader.infra.Repository
-import seki.com.re.hatenarssreader.mapper.ArticleErrorMapper
 import seki.com.re.hatenarssreader.presenter.Event
 import javax.inject.Inject
 
 class ArticleListViewModel @Inject constructor(
     private val category: Category,
-    private val repository: Repository,
-    private val errorMapper: ArticleErrorMapper
+    private val repository: Repository
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -54,20 +52,21 @@ class ArticleListViewModel @Inject constructor(
             .fetchHotEntry(category)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { onSuccessLoad(it) },
-                { onErrorLoad(it) }
-            ).addTo(disposables)
+            .subscribe { result -> onSuccessLoad(result) }
+            .addTo(disposables)
     }
 
-    private fun onSuccessLoad(articles: List<Article>) {
-        _articles.postValue(articles)
-        _swipeRefreshing.postValue(false)
-    }
-
-    private fun onErrorLoad(throwable: Throwable) {
-        _error.postValue(Event(errorMapper.map(throwable)))
-        _swipeRefreshing.postValue(false)
+    private fun onSuccessLoad(result: Result<List<Article>>) {
+        when (result) {
+            is Result.Success -> {
+                _articles.postValue(result.data)
+                _swipeRefreshing.postValue(false)
+            }
+            is Result.Failure -> {
+                _error.postValue(Event(result.error))
+                _swipeRefreshing.postValue(false)
+            }
+        }
     }
 
     private fun Disposable.addTo(disposables: CompositeDisposable) {
