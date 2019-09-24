@@ -3,6 +3,7 @@ package seki.com.re.hatenarssreader.presenter
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.DialogFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import seki.com.re.hatenarssreader.R
 import seki.com.re.hatenarssreader.data.Error
@@ -30,12 +31,11 @@ class MainActivity : AppCompatActivity(), Navigator, ArticleListBaseFragment.Lis
 
     override fun showErrorDialog(error: Error) {
         supportFragmentManager.findFragmentByTag(ERROR_DIALOG_TAG)?.let {
-            (it as ErrorDialogFragment).update(error)
-            return@showErrorDialog
+            (it as DialogFragment).dismissAllowingStateLoss()
         }
 
         ErrorDialogFragment.newInstance(error)
-            .show(supportFragmentManager, ERROR_DIALOG_TAG)
+            .showNow(supportFragmentManager, ERROR_DIALOG_TAG)
     }
 
     override fun goTo(intent: Intent) {

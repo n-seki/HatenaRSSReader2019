@@ -35,11 +35,4 @@ class ErrorDialogFragment : DialogFragment() {
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
     }
-
-    fun update(error: Error) {
-        (dialog as AlertDialog).apply {
-            setTitle(error.title)
-            setMessage(error.message)
-        }
-    }
 }
